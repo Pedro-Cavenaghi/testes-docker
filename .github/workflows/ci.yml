@@ -20,9 +20,13 @@ jobs:
 
       - name: Build com Docker Compose
         run: docker compose build
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
 
       - name: Push com Docker Compose
-        run: docker compose push        
+        run: docker compose push
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}        
 
       - name: Build e Push da Imagem
         uses: docker/build-push-action@v5
