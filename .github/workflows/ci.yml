@@ -35,5 +35,11 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASS }}
 
+      - name: Build com Docker Compose
+        run: docker compose build
+
+      - name: Push com Docker Compose
+        run: docker compose push
+
       - name: Rodar testes dentro do Container
         run: docker run ${{ secrets.DOCKER_USER }}/my-project-cicd:latest pytest
