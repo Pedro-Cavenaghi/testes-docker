@@ -18,6 +18,12 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASS }}
 
+      - name: Build com Docker Compose
+        run: docker compose build
+
+      - name: Push com Docker Compose
+        run: docker compose push        
+
       - name: Build e Push da Imagem
         uses: docker/build-push-action@v5
         with:
@@ -29,17 +35,20 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
       - name: Login no Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASS }}
 
-      - name: Build com Docker Compose
-        run: docker compose build
+      - name: Subir ambiente de teste
+        run: docker compose up -d
 
-      - name: Push com Docker Compose
-        run: docker compose push
+      - name: Rodar testes dentro do Container
+        run: docker compose exec -T calculadora-app ping -c 1 servico-vizinho
 
       - name: Rodar testes dentro do Container
         run: docker run ${{ secrets.DOCKER_USER }}/my-project-cicd:latest pytest
