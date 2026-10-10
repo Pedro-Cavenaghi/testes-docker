@@ -50,9 +50,11 @@ jobs:
 
       - name: Subir ambiente de teste
         run: docker compose up -d
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
 
-      - name: Rodar testes dentro do Container
+      - name: Rodar testes dentro do Container (Ping)
         run: docker compose exec -T calculadora-app ping -c 1 servico-vizinho
 
-      - name: Rodar testes dentro do Container
+      - name: Rodar testes dentro do Container (Pytest)
         run: docker run ${{ secrets.DOCKER_USER }}/my-project-cicd:latest pytest
